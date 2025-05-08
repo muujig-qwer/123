@@ -20,20 +20,27 @@ export default function BookTable({
 }: Props) {
   return (
     <Table
+      bordered
+      className="rounded-lg shadow-md"
       dataSource={books}
       columns={[
         {
-          title: "Topic",
-          render: (item: any) => <p>{item.title || "xoxo"}</p>,
+          title: "📚 Гарчиг",
+          dataIndex: "title",
+          render: (text: string) => <strong>{text || "xoxo"}</strong>,
         },
-        { title: "Author", dataIndex: "author" },
-        { title: "Year", dataIndex: "publishYear" },
+        { title: "✍️ Зохиогч", dataIndex: "author" },
+        { title: "📅 Он", dataIndex: "publishYear" },
         {
-          title: "Action",
+          title: "⚙️ Үйлдэл",
           render: (record: BookType) => (
             <Space>
-              <Button onClick={() => onEdit(record)}>Засварлах</Button>
-              <Button danger onClick={() => onDelete(record._id!)}>Устгах</Button>
+              <Button type="link" onClick={() => onEdit(record)}>
+                Засварлах
+              </Button>
+              <Button danger type="link" onClick={() => onDelete(record._id!)}>
+                Устгах
+              </Button>
             </Space>
           ),
         },

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Modal, Form } from "antd";
+import { Button, Modal, Input, InputNumber, ConfigProvider, Form } from "antd";
 import BookForm from "./BookForm";
 import BookTable from "./BookTable";
 import { BookType, PagModel } from "../../../types/book";
@@ -72,24 +72,53 @@ export default function BookManager() {
 
   return (
     <div className="p-5">
-      <Button type="primary" onClick={handleAdd} className="mb-4">
-        Бүртгэх
-      </Button>
-      <BookTable
-        books={books}
-        loading={loading}
-        pagination={pagination}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onChange={handleTableChange}
-      />
+      <div className="flex gap-2">
+        <Button
+          type="primary"
+          onClick={handleAdd}
+          className="flex mb-4 bg-blue-600 hover:bg-blue-700"
+        >
+          ➕ Бүртгэх
+        </Button>
+        <Button onClick={() => fetchBooks(1, 5)}>Дахин ачааллах</Button>
+      </div>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#3b82f6", // Tailwind blue-500
+            borderRadius: 12,
+          },
+        }}
+      >
+        <BookTable
+          books={books}
+          loading={loading}
+          pagination={pagination}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onChange={handleTableChange}
+        />
+      </ConfigProvider>
+
       <Modal
-        title={editingBook ? "Edit" : "Add"}
+        title={editingBook ? "📘 Засварлах" : "📗 Шинэ ном нэмэх"}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={handleOk}
+        okText={editingBook ? "Хадгалах" : "Нэмэх"}
+        cancelText="Цуцлах"
       >
-        <BookForm form={form} />
+        <Form form={form} layout="vertical">
+          <Form.Item name="title" label="Гарчиг" rules={[{ required: true }]}>
+            <Input placeholder="Номын гарчиг" />
+          </Form.Item>
+          <Form.Item name="author" label="Зохиогч" rules={[{ required: true }]}>
+            <Input placeholder="Зохиогчийн нэр" />
+          </Form.Item>
+          <Form.Item name="publishYear" label="Он" rules={[{ required: true }]}>
+            <InputNumber className="w-full" placeholder="2024" />
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );
